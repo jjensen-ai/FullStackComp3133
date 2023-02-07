@@ -1,0 +1,23 @@
+* {
+  box-sizing: border-box;
+}
+
+.login {
+  height: auto;
+  width: 20rem;
+  background-color: #0c0c0c;
+  margin-top: 5rem;
+  padding: 2rem;
+  border-radius: 15px;
+}
+
+input[type='text'],
+input[type='password'] {
+  background-color: #a1a1a1;
+}
+
+.button {
+  margin-left: 1.35rem;
+  width: 10rem;
+  margin-top: 1rem;
+}
