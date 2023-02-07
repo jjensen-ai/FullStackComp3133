@@ -1,8 +1,11 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+
 const http = require('http');
 const bodyParser = require('body-parser');
+
+const sessions = require('express-session');
 
 const server = http.createServer(app);
 const io = require('socket.io')(server);
@@ -11,17 +14,32 @@ const port = 3000;
 
 const mongoose = require('mongoose');
 const user = require('./models/users');
+const cookieParser = require('cookie-parser');
+
+const day = 1000 * 60 * 60 * 24;
+
+app.use(
+  sessions({
+    secret: 'secretkey',
+    saveUninitialized: true,
+    cookie: { maxAge: day },
+    resave: false,
+  })
+);
+app.use(cookieParser());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'web')));
+
+let session;
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/web/login.html');
 });
 
 app.post('/login', async (req, res) => {
-  const userName = req.body.userName
-  const password = req.body.password
+  const userName = req.body.userName;
+  const password = req.body.password;
 
   if (!userName || !password) {
     res.send({ message: 'Please Enter username or password' });
@@ -30,20 +48,21 @@ app.post('/login', async (req, res) => {
   const successUser = await user.findOne({ userName: userName });
   if (successUser) {
     if (successUser.password === password) {
-      res.send({
-        status: true,
-        userName: successUser.userName,
-        message: 'Successful Login',
-      });
+      session = req.session;
+      session.user = req.body.userName;
+      console.log(req.session);
+      res.redirect('/home');
     } else {
-      res.send({
-        status: false,
-        message: 'Invalid Password',
-      });
+      res.redirect('/');
     }
   } else {
-    res.send({ message: 'invalid user name' });
+    res.redirect('/');
   }
+});
+
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
 });
 
 app.get('/register', (req, res) => {
