@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const employeeSchema = new mongoose.Schema({
-  first_name: {
+  firstName: {
     type: String,
     maxlength: 100,
     required: true,
     lowercase: true,
   },
-  last_name: {
+  lastName: {
     type: String,
     maxlength: 50,
     required: true,
