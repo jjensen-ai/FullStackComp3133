@@ -1,4 +1,3 @@
-import { GraphQLError, graphql } from 'graphql';
 import { employee } from '../models/employeeModel';
 import { user } from '../models/users';
 
@@ -10,6 +9,24 @@ export const resolvers = {
     getEmployee: async ({ id }: any) => {
       return await employee.findById(id);
     },
+    login: async (
+      parent: any | undefined,
+      { username, password }: any | undefined
+    ) => {
+      const userLogin = await user.findOne({ username });
+
+      if (!userLogin) {
+        throw Error(`${username} does not exist`);
+      }
+
+      const validUser = await user.findOne({ password });
+
+      if (!validUser) {
+        throw Error('Password is incorrect');
+      }
+
+      return userLogin;
+    },
   },
 
   Mutation: {
@@ -19,9 +36,7 @@ export const resolvers = {
       const newUser = new user({ username, email, password });
 
       if (email === user.findOne(email)) {
-        throw new GraphQLError(
-          'This email is already in use, try a different one'
-        );
+        throw Error('This email is already in use, try a different one');
       } else {
         await newUser.save();
       }
@@ -29,7 +44,7 @@ export const resolvers = {
       return newUser;
     },
 
-    addEmployee: async (args: any | undefined) => {
+    addEmployee: async (parent: any, args: any | undefined) => {
       const { firstName, lastName, email, gender, salary } = args;
 
       const newEmployee = new employee({
@@ -41,9 +56,7 @@ export const resolvers = {
       });
 
       if (email === employee.findOne(email)) {
-        throw new GraphQLError(
-          'This email is already in use, try a different one'
-        );
+        throw Error('This email is already in use, try a different one');
       } else {
         await newEmployee.save();
       }
@@ -51,24 +64,28 @@ export const resolvers = {
       return newEmployee;
     },
 
-    updateEmployee: async (args: any | undefined) => {
+    updateEmployee: async (parent: any, args: any | undefined) => {
       const { id, firstName, lastName, email, gender, salary } = args;
-      const currentEmployee = employee.findByIdAndUpdate(id, {
-        firstName,
-        lastName,
-        email,
-        gender,
-        salary,
-      });
+      const currentEmployee = employee.findByIdAndUpdate(
+        id,
+        {
+          firstName,
+          lastName,
+          email,
+          gender,
+          salary,
+        },
+        { new: true }
+      );
 
       if (!currentEmployee) {
-        throw new Error('This employee does not exist');
+        throw Error('This employee does not exist');
       }
 
       return await currentEmployee;
     },
 
-    deleteEmployee: async (args: any | undefined) => {
+    deleteEmployee: async (parent: any, args: any | undefined) => {
       const { id } = args;
       await employee.findByIdAndDelete(id);
       return 'Employee has been deleted successfully';
