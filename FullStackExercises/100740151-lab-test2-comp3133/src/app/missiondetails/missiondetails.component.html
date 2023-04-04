@@ -1,0 +1,69 @@
+<h1>Details</h1>
+
+<div *ngIf="flight">
+    <div class="flex flex-col w-1/2 mx-5">
+        <img src="{{flight.links.mission_patch_small}}" width="150"/>
+        <div class="flex flex-row items-center ">
+            <div class="mr-4"> 
+                <h1 class="text-white mr-4">
+                Mission:
+            </h1> 
+        </div>
+        <div>
+            <p class="text-white text-lg">
+                {{flight.mission_name}}
+             </p>
+            </div>
+        </div>
+        <div class="flex flex-row items-center ">
+            <div class="mr-4"> 
+                <h1 class="text-white mr-4">
+                Rocket ID:
+            </h1> 
+        </div>
+        <div>
+            <p class="text-white text-lg">
+                {{flight.rocket.rocket_id}}
+             </p>
+            </div>
+        </div>
+        <div class="flex flex-row items-center ">
+            <div class="mr-4"> 
+                <h1 class="text-white mr-4">
+                Rocket Type:
+            </h1> 
+        </div>
+        <div>
+            <p class="text-white text-lg">
+                {{flight.rocket.rocket_type}}
+             </p>
+            </div>
+        </div>
+        <div class="flex flex-row items-center ">
+            <div class="mr-4"> 
+                <h1 class="text-white mr-4">
+                Rocket Name:
+            </h1> 
+        </div>
+        <div>
+            <p class="text-white text-lg">
+                {{flight.rocket.rocket_name}}
+             </p>
+            </div>
+        </div>
+        <div class="flex flex-row items-center ">
+            <div class="mr-4"> 
+                <h1 class="text-white mr-4">
+                Details
+            </h1> 
+        </div>
+        <div>
+            <p class="text-white text-lg">
+                {{flight.details}}
+             </p>
+            </div>
+        </div>
+        <button (click)="launchList()" class="p-2 text-lg text-black bg-slate-200 rounded-lg w-1/2"> Mission List </button>
+    </div>
+
+</div>

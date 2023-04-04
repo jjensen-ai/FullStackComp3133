@@ -1,0 +1,31 @@
+<div class="flex justify-center">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<div class="">
+        <ul class="flex flex-col items-center">
+            <li *ngFor="let flight of launches" class="mb-5 w-1/2 h-3/4 bg-gray-500 rounded-xl p-4 border border-gray-400">
+                <div class="flex flex-row items-center justify-between">
+                    
+                    <div class="flex flex-col">
+                        <div class="flex flex-row justify-center text-3xl text-white mb-2 font-bold">{{flight.mission_name}}</div>
+                        <img src="{{flight.links.mission_patch_small}}" class="w-50" />
+                    </div>
+                    <div class="flex flex-col w-1/2">
+                        <span class="text-xl font-black">Launch Year</span>
+                        <span class="text-lg font-semibold"> {{flight.launch_year}}</span>
+                        <span class="text-xl font-black">Mission Details</span>
+                        <span class="text-base font-semibold">{{flight.details}}</span>
+                    </div> 
+                </div>
+                <div class="flex flex-row mt-4 justify-end">
+                    <button (click)="launchDetails(flight.flight_number)" class="px-2 py-1 bg-black rounded-lg text-lg text-slate-100">
+                        Launch Details
+                    </button>
+                </div>
+            </li>
+        </ul>
+    
+    
+</div>
